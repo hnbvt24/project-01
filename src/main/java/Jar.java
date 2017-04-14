@@ -2,48 +2,58 @@ import java.util.Random;
 
 class Jar {
   private String item;
-  private String number;
-  private Random random;
+  private int maxNumber;
+  private int someNumber;
   private int attempts;
   
-  public Jar(String item, String number, Random random) {
+  public Jar(String item, int maxNumber) {
     this.item = item;
-    this.number = number;
-    this.random = random;
+    this.maxNumber = maxNumber;
+    someNumber = 0;
     attempts = 0;
+  }
+  
+  public int fill() {
+     Random random = new Random();
+     
+     someNumber = ((random.nextInt(maxNumber)) + 1);
+     // Some number will be between 1 and MAX NUMBER
+     return someNumber;
   }
   
   public String getItem() {
     return item;
   }
 
-  public String getNumber() {
-    return number;
+  public int getMaxNumber() {
+    return maxNumber;
   }
   
-  public Random getRandom() {
-    return random; 
+  public int checkGuess(int guessInput) {
+    if(guessInput > getMaxNumber()) {
+      throw new IllegalArgumentException("Your guess must be less than " + getMaxNumber()); 
+    }
+    
+    return guessInput; 
   }
   
   public boolean applyGuess(int guessInput) {
-    int maxItemsAllowed = Integer.parseInt(getNumber());
-    int someNumber = (getRandom().nextInt(maxItemsAllowed)) + 1;
+    int guess = checkGuess(guessInput);
     boolean isCorrect = someNumber == guessInput;
-    if (isCorrect) {
-      System.out.println("You've got it!");
-    } else {
+    
+    if (isCorrect == false) {
+      if (guessInput < someNumber) {
+      System.out.println("Your guess is too low");
+      } else {
+      System.out.println("Your guess is too high"); 
+      }
       attempts ++;
-      System.out.println("Guess again.");
     }
     return isCorrect;
   }
   
   public int getAttempts() {
-    return attempts; 
+    return attempts + 1; 
   }
-  
-//  public boolean isWon() {
-//    return random.equals(guess);
-//  }
-  
+
 }
